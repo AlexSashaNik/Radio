@@ -1,7 +1,7 @@
 package ru.netology.update;
 
 public class Radio {
-    private int maxRadioWave = 9;
+    private int maxRadioWave;
     private int minRadioWave = 0;
     private int currentRadioWave = 0;
     private int maxSoundLevel = 10;
@@ -10,6 +10,13 @@ public class Radio {
 
     private String name;
     private int id;
+
+    public Radio() {
+        maxRadioWave = 9;
+    }
+    public Radio(int stationCount) {
+        maxRadioWave = stationCount - 1;
+    }
 
     //Radio Waves
     public Radio(int maxRadioWave, String name) {
