@@ -1,78 +1,113 @@
 package ru.netology.update;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.security.PublicKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RadioTest {
 
-    //Waves
     @Test
-    public void validateRadioWaveOverPossible() {
-        Radio radio = new Radio(10, "nameMax");
-        radio.setCurrentRadioWave(18);
-        assertEquals(0, radio.getCurrentRadioWave());
-        assertEquals("nameMax", radio.getName());
+    public void inputRadioWave() {
+        Radio radio = new Radio(20);
+        Assertions.assertEquals(19, radio.getMaxRadioWave());
+        Assertions.assertEquals(0, radio.getMinRadioWave());
+        Assertions.assertEquals(0, radio.getCurrentRadioWave());
     }
     @Test
-    public void validateRadioWaveLessPossible() {
-        Radio radio = new Radio(10, 0, "nameMin");
-        radio.setCurrentRadioWave(-5);
-        assertEquals(10, radio.getCurrentRadioWave());
-        assertEquals(10, radio.getCurrentRadioWave());
-        assertEquals("nameMin", radio.getName());
+    public void inputNegativeRadioWave() {
+        Radio radio = new Radio(-20);
+        Assertions.assertEquals(0, radio.getMaxRadioWave());
+        Assertions.assertEquals(0, radio.getMinRadioWave());
+        Assertions.assertEquals(0, radio.getCurrentRadioWave());
     }
     @Test
-    public void currentRadioWaveUp() {
-        Radio radio = new Radio(10, 0, 8, "nameCurrentOne");
+    public void nextRadioWaveIfMax() {
+        Radio radio = new Radio(11);
         radio.setCurrentRadioWave(10);
-        assertEquals(10, radio.getMaxRadioWave());
-        assertEquals(0, radio.getMinRadioWave());
-        assertEquals(0, radio.currentRadioWaveUp());
-        assertEquals("nameCurrentOne", radio.getName());
-    }
-    @Test
-    public void currentRadioWaveDown() {
-        Radio radio = new Radio("nameCurrentTwo", 10, 0, 8);
-        radio.setCurrentRadioWave(0);
-        assertEquals("nameCurrentTwo", radio.getName());
-        assertEquals(10, radio.getMaxRadioWave());
-        assertEquals(0, radio.getMinRadioWave());
-        assertEquals(10, radio.currentRadioWaveDown());
-    }
-    //Sound
-    @Test
-    public void validateChangeSoundLevelOverPossible() {
-        Radio radio = new Radio(100, 123);
-        radio.setCurrentSoundLevel(150);
-        assertEquals(100, radio.getCurrentSoundLevel());
-        assertEquals(123, radio.getId());
-    }
-    @Test
-    public void validateChangeSoundLevelUnderPossible() {
-        Radio radio = new Radio(0, "nameInSound", 456);
-        radio.setCurrentSoundLevel(-8);
-        assertEquals(0, radio.getCurrentSoundLevel());
-        assertEquals("nameInSound", radio.getName());
-        assertEquals(456, radio.getId());
-    }
-    @Test
-    public void currentSoundLevelUp() {
-        Radio radio = new Radio(100, 18, "nameMaxSound", 789);
-        radio.setCurrentSoundLevel(100);
-        assertEquals(100, radio.getCurrentSoundLevel());
-        assertEquals(100, radio.currentSoundLevelUp());
-        assertEquals("nameMaxSound", radio.getName());
-        assertEquals(789, radio.getId());
-    }
-    @Test
-    public void currentSoundLevelDown() {
-        Radio radio = new Radio(0, "nameMinSound", 18, 741);
-        radio.setCurrentSoundLevel(0);
-        assertEquals(0, radio.getCurrentSoundLevel());
-        assertEquals("nameMinSound", radio.getName());
-        assertEquals(0, radio.currentSoundLevelDown());
-        assertEquals(741, radio.getId());
-    }
+        radio.setNextRadioWave();
 
+        int expected = 0;
+        int actual = radio.getCurrentRadioWave();
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void nextRadioWaveIfMin() {
+        Radio radio = new Radio(33);
+        radio.setCurrentRadioWave(0);
+        radio.setNextRadioWave();
+
+        int expected = 1;
+        int actual = radio.getCurrentRadioWave();
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void prevRadioWaveIfMin() {
+        Radio radio = new Radio(51);
+        radio.setCurrentRadioWave(0);
+        radio.setPrevRadioWave();
+
+        int expected = 50;
+        int actual = radio.getCurrentRadioWave();
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void prevRadioWaveIfMax() {
+        Radio radio = new Radio(40);
+        radio.setCurrentRadioWave(39);
+        radio.setPrevRadioWave();
+
+        int expected = 38;
+        int actual = radio.getCurrentRadioWave();
+
+        Assertions.assertEquals(expected, actual);
+
+    }
+    @Test
+    public void increaseSoundLevelIfMax() {
+        Radio radio = new Radio();
+        radio.setCurrentSoundLevel(100);
+        radio.increaseSoundLevel();
+
+        int expected = 100;
+        int actual = radio.getCurrentSoundLevel();
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void increaseSoundLevelIfMin() {
+        Radio radio = new Radio();
+        radio.setCurrentSoundLevel(0);
+        radio.increaseSoundLevel();
+
+        int expected = 1;
+        int actual = radio.getCurrentSoundLevel();
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void decreaseSoundLevelIfMin() {
+        Radio radio = new Radio();
+        radio.setCurrentSoundLevel(0);
+        radio.decreaseSoundLevel();
+
+        int expected = 0;
+        int actual = radio.getCurrentSoundLevel();
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void decreaseSoundLevelIfMax() {
+        Radio radio = new Radio();
+        radio.setCurrentSoundLevel(100);
+        radio.decreaseSoundLevel();
+
+        int expected = 99;
+        int actual = radio.getCurrentSoundLevel();
+
+        Assertions.assertEquals(expected, actual);
+    }
 }
